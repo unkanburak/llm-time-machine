@@ -2,8 +2,11 @@
 
 > 1966 → 2026, sohbet ederek öğren — chat with LLMs across history.
 
-An interactive timeline where users chat with simulated versions of historical
-LLMs to feel how language models evolved. Built for Teknofest / Cursor Hackathon.
+An interactive timeline where users **chat with historical LLM eras** to feel how
+prompting, style, and limitations evolved. Built for **Teknofest / Cursor Hackathon**.
+
+**Pitch (TR)**: 60 yıllık LLM evrimini, aynı soruyu farklı dönem “modellerine” sorarak canlı deneyimletir.  
+**Pitch (EN)**: Experience 60 years of LLM evolution by asking the *same prompt* across eras and comparing responses.
 
 ## What it does
 
@@ -16,6 +19,8 @@ LLMs to feel how language models evolved. Built for Teknofest / Cursor Hackathon
 - **Bilingual**: TR/EN toggle, top right.
 - **Info panel**: parameters, architecture, training data, key innovation,
   paper link for every model.
+- **Suggested prompts**: each chat-enabled model ships with **2 technical + 2 fun**
+  one-click prompts to help the jury trigger era-specific behavior fast.
 
 ## Stack
 
@@ -27,18 +32,45 @@ LLMs to feel how language models evolved. Built for Teknofest / Cursor Hackathon
 
 ## Setup
 
+Create a local env file:
+
 ```bash
-# 1. Install dependencies
+cp .env.example .env.local
+```
+
+Then put your key in `.env.local`:
+
+```env
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+Run the app:
+
+```bash
 npm install
-
-# 2. Add your Anthropic API key to .env.local
-#    (already pre-filled if you came here via the hackathon flow)
-echo "ANTHROPIC_API_KEY=sk-ant-..." > .env.local
-
-# 3. Run
 npm run dev
 # → http://localhost:3000
 ```
+
+## Quick demo (jury script, ~3 minutes)
+
+Use the one-click suggested prompts inside each model chat. For maximum impact,
+use **Compare Mode** for the last two.
+
+1. **ELIZA** → (Fun) "Son zamanlarda endişelenmeyi durduramıyorum."
+   - Talking point: *"1966: LLM yok. Sadece kurallar — ama hâlâ insan gibi hissettiriyor."*
+
+2. **GPT-2** → (Technical) "Wikipedia tarzı giriş: Başlık: İstanbul..."
+   - Talking point: *"2019: metin tamamlama var, sohbet yok; hızlıca dağılıyor."*
+
+3. **ChatGPT (2022)** → (Fun) "2022 Dünya Kupası'nı kim kazandı?"
+   - Talking point: *"Cutoff devreye giriyor. Kullanıcıyla konuşuyor ama bilgisi sınırlı."*
+
+4. **Compare Mode (default: ELIZA + GPT‑3 + Frontier)** → "Fransa'nın başkenti neresi?"
+   - Talking point: *"Aynı soru, 3 dönem, 3 farklı ‘zeka hissi’."*
+
+5. **Compare Mode** → "2022'de ne oldu?"
+   - Talking point: *"Kesim tarihini (knowledge cutoff) tek ekranda gösterir."*
 
 ## Demo Script (5-prompt jury walkthrough, ~3 minutes)
 
@@ -79,8 +111,8 @@ app/
   api/chat/route.ts          → POST /api/chat — Anthropic streaming proxy
 components/
   Timeline.tsx               → horizontal scrollable model cards
-  ChatPanel.tsx              → chat UI with streaming, suggested prompts, errors
-  InfoPanel.tsx              → right sidebar metadata
+  ChatPanel.tsx              → chat UI + streaming + 2 technical + 2 fun prompt chips
+  InfoPanel.tsx              → right sidebar metadata + visible knowledge cutoff
   CompareMode.tsx            → modal, parallel streams to multiple models
   EraBadge.tsx               → "Era Simulation" / "Authentic" badge
 lib/
@@ -110,8 +142,8 @@ Weizenbaum's DOCTOR script in `lib/eliza.ts`, with bilingual rule sets.
 
 - API key in `.env.local` is git-ignored. **Revoke the demo key after the
   hackathon** — it's been pasted around.
-- Compare Mode default selection is ELIZA + GPT-2 + ChatGPT for maximum
-  contrast on first demo.
+- Compare Mode default selection is **ELIZA + GPT‑3 + Frontier** for a clean
+  “rules → few-shot completion → modern frontier” evolution arc.
 - The "Era Simulation" amber badge is intentional honesty — we tell the jury
   *up front* that older models are simulated by a modern one, so they trust
   the rest.
